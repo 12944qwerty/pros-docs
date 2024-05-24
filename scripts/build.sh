@@ -7,5 +7,5 @@ mkdir ./build/v5/pros-4
 cp -r pros-doxygen-docs/* ./build/v5/pros-4/
 
 pushd build
-tar -zcf ../pros-docs.tar.gz *
+tar -zcf ../artifacts/pros-docs.tar.gz *
 popd
