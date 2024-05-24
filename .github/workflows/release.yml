@@ -28,11 +28,14 @@ jobs:
             tar -czf ../pros-docs.tar.gz *
             cd ..
 
-      - name: Deploy
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+      - name: Send Artifact to Server
+        uses: betanzos/scp-upload@v1
         with:
+          source: pros-docs.tar.gz
           host: ${{ vars.SSH_HOST }}
-          user: ${{ secrets.SSH_USER }}
+          username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          scp: pros-docs.tar.gz => ~/pros-website/
-          last_ssh: ~/pros-website/deploy.sh
+          remote_dir: ~/pros-website
+
+      - name: Deploy!
+        run: ssh -i key ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }} '~/pros-website/deploy.sh'
