@@ -21,17 +21,12 @@ jobs:
           # name: pros-docs.tar.gz
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id }}
-          path: pros-docs.tar.gz
 
       - name: Send Artifact to Server
-        run: |
-          echo "${{ secrets.SSH_KEY }}" > key
-          chmod 400 key
-          scp -o StrictHostKeyChecking=no -i key pros-docs.tar.gz ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:~/pros-website
-        # uses: betanzos/scp-upload@v1
-        # with:
-        #   source: pros-docs.tar.gz
-        #   host: ${{ vars.SSH_HOST }}
-        #   username: ${{ vars.SSH_USER }}
-        #   key: ${{ secrets.SSH_KEY }}
-        #   remote_dir: ~/pros-website
+        uses: betanzos/scp-upload@v1
+        with:
+          source: pros-docs.tar.gz
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          remote_dir: ~/pros-website
