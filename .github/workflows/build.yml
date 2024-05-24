@@ -32,3 +32,5 @@ jobs:
       with:
         name: pros-website.tar.gz
         path: ./artifacts/pros-docs.tar.gz
+
+    - run: ls -la ./artifacts
