@@ -30,6 +30,6 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: pros-docs.tar.gz
-        path: ./artifacts/pros-docs.tar.gz
+        name: pros-docs
+        path: ./build
         compression-level: 0 # no extra compression

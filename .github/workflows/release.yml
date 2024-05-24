@@ -24,7 +24,6 @@ jobs:
 
       - run: |
           ls -l
-          ls -l pros-docs.tar.gz
 
       - name: Send Artifact to Server
         uses: betanzos/scp-upload@v1
