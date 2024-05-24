@@ -27,7 +27,7 @@ jobs:
             ls -l
             cd pros-docs
             ls -l
-            tar -czf pros-docs.tar.gz *
+            tar -czf ../pros-docs.tar.gz *
             cd ..
 
       - name: Send Artifact to Server
