@@ -18,13 +18,13 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
-          name: pros-website.tar.gz
-          path: pros-website.tar.gz
+          name: pros-docs.tar.gz
+          path: pros-docs.tar.gz
 
       - name: Send Artifact to Server
         uses: betanzos/scp-upload@v1
         with:
-          source: pros-website.tar.gz
+          source: pros-docs.tar.gz
           host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}

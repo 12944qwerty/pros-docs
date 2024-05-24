@@ -30,7 +30,5 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: pros-website.tar.gz
+        name: pros-docs.tar.gz
         path: ./artifacts/pros-docs.tar.gz
-
-    - run: ls -la ./artifacts
