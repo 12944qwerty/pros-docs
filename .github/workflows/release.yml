@@ -24,17 +24,15 @@ jobs:
 
       - name: Compress Artifact
         run: |
-            ls -l
             cd pros-docs
-            ls -l
             tar -czf ../pros-docs.tar.gz *
             cd ..
 
-      - name: Send Artifact to Server
-        uses: betanzos/scp-upload@v1
+      - name: Deploy
+        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
         with:
-          source: pros-docs.tar.gz
           host: ${{ vars.SSH_HOST }}
-          username: ${{ vars.SSH_USER }}
+          user: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          remote_dir: ~/pros-website
+          scp: pros-docs.tar.gz => ~/pros-website/
+          last_ssh: ~/pros-website/deploy.sh
