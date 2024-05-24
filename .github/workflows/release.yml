@@ -23,7 +23,7 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
 
       - name: Tar Artifact
-        run: tar -xzf pros-docs.tar.gz pros-docs/build
+        run: tar -czf pros-docs.tar.gz pros-docs/build
 
       - name: Send Artifact to Server
         uses: betanzos/scp-upload@v1
