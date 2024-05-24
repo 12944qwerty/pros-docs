@@ -40,4 +40,4 @@ jobs:
       - name: Deploy!
         run: |
             echo "${{ secrets.SSH_KEY }}" > key
-            ssh -i key ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }} '~/pros-website/deploy.sh'
+            ssh -o StrictHostKeyChecking=no -i key ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }} '~/pros-website/deploy.sh'
