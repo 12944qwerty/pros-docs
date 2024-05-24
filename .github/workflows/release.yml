@@ -23,7 +23,12 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
 
       - name: Compress Artifact
-        run: tar -czf pros-docs.tar.gz -C ./pros-docs
+        run: |
+            ls -l
+            cd pros-docs
+            ls -l
+            tar -czf pros-docs.tar.gz *
+            cd ..
 
       - name: Send Artifact to Server
         uses: betanzos/scp-upload@v1
