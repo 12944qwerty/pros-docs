@@ -32,4 +32,3 @@ jobs:
       with:
         name: pros-docs
         path: ./build
-        compression-level: 0 # no extra compression
