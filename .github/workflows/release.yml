@@ -19,6 +19,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           # name: pros-docs.tar.gz
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
           path: pros-docs.tar.gz
 
       - run: ls
