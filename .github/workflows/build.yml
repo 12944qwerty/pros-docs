@@ -32,3 +32,4 @@ jobs:
       with:
         name: pros-docs.tar.gz
         path: ./artifacts/pros-docs.tar.gz
+        compression-level: 0 # no extra compression
