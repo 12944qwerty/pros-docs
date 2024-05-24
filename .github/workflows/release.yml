@@ -25,10 +25,10 @@ jobs:
 
       - name: Send Artifact to Server
         run: |
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 400 ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_KEY }}" > key
+          chmod 400 key
           ssh-keyscan -H ${{ vars.SSH_HOST }} >> ~/.ssh/known_hosts
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa pros-docs.tar.gz ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:~/pros-website
+          scp -o StrictHostKeyChecking=no -i key pros-docs.tar.gz ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:~/pros-website
         # uses: betanzos/scp-upload@v1
         # with:
         #   source: pros-docs.tar.gz
