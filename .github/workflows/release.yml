@@ -1,6 +1,7 @@
 name: Release Site
 
 on:
+  push:
   workflow_run:
     workflows: ["Build Site"]
     types:
@@ -47,12 +48,11 @@ jobs:
         run: |
             echo "${{ secrets.SSH_KEY }}" > key
             chmod 400 key
+            mkdir ~/.ssh
+            touch ~/.ssh/known_hosts
             ssh-keyscan -H ${{ vars.JUMP_HOST}},${{ vars.SSH_HOST }} >> ~/.ssh/known_hosts
             scp -i key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -A -J ${{ vars.JUMP_USER }}@${{ vars.JUMP_HOST}} pros-docs.tar.gz ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:~/pros-website
 
       - name: Deploy!
         run: |
-            echo "${{ secrets.SSH_KEY }}" > key
-            chmod 400 key
-            ssh-keyscan -H ${{ vars.JUMP_HOST}},${{ vars.SSH_HOST }} >> ~/.ssh/known_hosts
             ssh -i key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -A -J ${{ vars.JUMP_USER }}@${{ vars.JUMP_HOST}} ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }} '~/pros-website/deploy.sh'
