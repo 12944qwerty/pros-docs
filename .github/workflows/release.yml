@@ -15,42 +15,44 @@ jobs:
       name: legion
       url: https://pros.cs.purdue.edu
     steps:
-      - name: Deploy Website
-        uses: appleboy/ssh-action@v1.2.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          host: ${{ vars.SSH_HOST }}
-          username: ${{ vars.SSH_USER }}
-          proxy_host: ${{ vars.JUMP_HOST }}
-          proxy_username: ${{ vars.JUMP_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          proxy_key: ${{ secrets.SSH_KEY }}
-          envs: GITHUB_TOKEN
-          script: ~/pros-website/deploy.sh ${{ github.event.workflow_run.id }}
-      # - name: Download Artifact
-      #   uses: actions/download-artifact@v4
+      # - name: Deploy Website
+      #   uses: appleboy/ssh-action@v1.2.0
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #   with:
-      #     # name: pros-docs.tar.gz
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     run-id: ${{ github.event.workflow_run.id }}
+      #     host: ${{ vars.SSH_HOST }}
+      #     username: ${{ vars.SSH_USER }}
+      #     proxy_host: ${{ vars.JUMP_HOST }}
+      #     proxy_username: ${{ vars.JUMP_USER }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     proxy_key: ${{ secrets.SSH_KEY }}
+      #     envs: GITHUB_TOKEN
+      #     script: ~/pros-website/deploy.sh ${{ github.event.workflow_run.id }}
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          # name: pros-docs.tar.gz
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
 
-      # - name: Compress Artifact
-      #   run: |
-      #       cd pros-docs
-      #       tar -czf ../pros-docs.tar.gz *
-      #       cd ..
+      - name: Compress Artifact
+        run: |
+            cd pros-docs
+            tar -czf ../pros-docs.tar.gz *
+            cd ..
 
-      # # Because PurdueCS only allows access to legion on campus we have to do some port forwarding through a jumphost.
-      # # The jumphost has been set up on a student's data server. Only the vars.SSH_USER has to be updated when needed here.
-      # - name: Send Artifact to Server
-      #   run: |
-      #       echo "${{ secrets.SSH_KEY }}" > key
-      #       chmod 400 key
-      #       scp -i key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -A -J ${{ vars.JUMP_USER }}@${{ vars.JUMP_HOST}} pros-docs.tar.gz ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:~/pros-website
+      # Because PurdueCS only allows access to legion on campus we have to do some port forwarding through a jumphost.
+      # The jumphost has been set up on a student's data server. Only the vars.SSH_USER has to be updated when needed here.
+      - name: Send Artifact to Server
+        run: |
+            echo "${{ secrets.SSH_KEY }}" > key
+            chmod 400 key
+            ssh-keyscan -H ${{ vars.JUMP_HOST}},${{ vars.SSH_HOST }} >> ~/.ssh/known_hosts
+            scp -i key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -A -J ${{ vars.JUMP_USER }}@${{ vars.JUMP_HOST}} pros-docs.tar.gz ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }}:~/pros-website
 
-      # - name: Deploy!
-      #   run: |
-      #       echo "${{ secrets.SSH_KEY }}" > key
-      #       chmod 400 key
-      #       ssh -i key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -A -J ${{ vars.JUMP_USER }}@${{ vars.JUMP_HOST}} ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }} '~/pros-website/deploy.sh'
+      - name: Deploy!
+        run: |
+            echo "${{ secrets.SSH_KEY }}" > key
+            chmod 400 key
+            ssh-keyscan -H ${{ vars.JUMP_HOST}},${{ vars.SSH_HOST }} >> ~/.ssh/known_hosts
+            ssh -i key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -A -J ${{ vars.JUMP_USER }}@${{ vars.JUMP_HOST}} ${{ vars.SSH_USER }}@${{ vars.SSH_HOST }} '~/pros-website/deploy.sh'
